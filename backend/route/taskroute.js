@@ -1,25 +1,16 @@
 const express = require("express");
+const { createTask, getTasks, getTask, deleteTask, updateTask } = require("../controllers/taskcontrollers");
 const Task = require("../model/taskmodel");
 const route = express.Router();
 
-route.post("/api/tasks", async (req,res)=>{
-    try{
-        const task = await Task.create(req.body);
-        res.status(201).json(task);
-    }
-    catch(error){
-        res.status(500).json({msg:error.msg});
-    }
-})
+route.route("/").post(createTask).get(getTasks);
+route.route("/:id").get(getTask).delete(deleteTask).put(updateTask);
 
-route.get("/api/tasks", async (req,res)=>{
-    try{
-        const task = await Task.find();
-        res.status(200).json(task);
-    }
-    catch(error){
-        res.status(500).json({msg:error.msg});
-    }
-})
+
+// route.post("/",createTask);
+// route.get("/",getTasks);
+// route.get("/:id",getTask);
+// route.delete("/:id",deleteTask);
+// route.put("/:id",updateTask);
 
 module.exports = route;
